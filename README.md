@@ -8,4 +8,4 @@ Since, we have unit tests we are able to find out that the system does not act i
 
 At the end you also to implement a [new test](https://github.com/mirsaeedi/SoftwareTestingTurorials/blob/515980e7f25c62d4fa10a9811b47aee66f3c3c4c/src/test/java/tutoria/core/banking/transfer/test/TestTransferScenarios.java#L263).
 
-The Slide Deck is uploaded here.
+The Slide Deck is uploaded [here](https://1drv.ms/b/s!AvPG99HJpJYfhppndmIdNr5ZycfKQg).
