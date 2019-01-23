@@ -41,13 +41,13 @@ public class TestTransferScenarios {
 	 * There are some inconsistencies between these tests and the SUT (System Under Test) because developers 
 	 * have not implemented the requirements in a correct way.  
 	 * 
-	 * 1. Run the tests and eliminate the bugs in the production code. Makes all tests go Green
+	 * 1. Run the tests and eliminate the bugs in the production code. Make all tests go Green
 	 * 2. Implement the Test method MoneyTransferThatResultsInFraud_IsNotAllowed (the last one)
 	 */
 	
 	/*
 	 * Scenario (Requirement): Transferring money from a normal account to another normal account is allowed.
-	 * This transaction removes the request amount of money from the 'From Account' and adds it to the 
+	 * This transaction removes the requested amount of money from the 'From Account' and adds it to the 
 	 * 'To Account'
 	 */
 	
@@ -85,10 +85,10 @@ public class TestTransferScenarios {
 		//arrange
 		
 		double fromBalance=1000;
-		Account from= new Account("accountNumber1",1000,false);
+		Account from= new Account("accountNumber1",1000,true);
 		
 		double toBalance=500;
-		Account to= new Account("accountNumber2",500,true);
+		Account to= new Account("accountNumber2",500,false);
 		
 		double transferAmount= 100;
 		
@@ -104,7 +104,8 @@ public class TestTransferScenarios {
 	}
 	
 	/*
-	 * Scenario (Requirement): Transferring money from an account to itself is considered as fraud.
+	 * Scenario (Requirement): Transferring money from an account to itself is considered as fraud. 
+	 * The account should get blocked
 	 */
 
 	@Test
@@ -127,6 +128,8 @@ public class TestTransferScenarios {
 		//assert
 		
 		assertThat(transferStatus,is(TransferStatus.Fraud));
+		assertThat(from.getIsBlocked(),is(true));
+		assertThat(to.getIsBlocked(),is(true));
 		assertThat(from.getBalance(),is(fromBalance));
 		assertThat(to.getBalance(),is(toBalance));
 	}
@@ -259,7 +262,7 @@ public class TestTransferScenarios {
 	 * transfers that are defined as FRAUD are not allowed to be done. A transaction is considered to be fraud if
 	 * the amount of transaction is more than 10K dollars. Both accounts should get blocked in such a scenario.
 	 */
-	@Test
+	
 	public void MoneyTransferThatResultsInFraud_IsNotAllowed() throws ConnectException {
 		 
 		//arrange
