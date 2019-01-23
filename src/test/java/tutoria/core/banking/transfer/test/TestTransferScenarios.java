@@ -114,10 +114,10 @@ public class TestTransferScenarios {
 		//arrange
 		
 		double fromBalance=1000;
-		Account from= new Account("accountNumber1",1000,false);
+		Account from= new Account("accountNumber1",fromBalance,false);
 		
 		double toBalance=500;
-		Account to= new Account("accountNumber1",1000,false);
+		Account to= new Account("accountNumber1",toBalance,false);
 		
 		double transferAmount= 100;
 		
