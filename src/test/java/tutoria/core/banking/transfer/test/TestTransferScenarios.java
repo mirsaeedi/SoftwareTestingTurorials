@@ -41,13 +41,13 @@ public class TestTransferScenarios {
 	 * There are some inconsistencies between these tests and the SUT (System Under Test) because developers 
 	 * have not implemented the requirements in a correct way.  
 	 * 
-	 * 1. Run the tests and eliminate the bugs in the production code. Makes all tests go Green
+	 * 1. Run the tests and eliminate the bugs in the production code. Make all tests go Green
 	 * 2. Implement the Test method MoneyTransferThatResultsInFraud_IsNotAllowed (the last one)
 	 */
 	
 	/*
 	 * Scenario (Requirement): Transferring money from a normal account to another normal account is allowed.
-	 * This transaction removes the request amount of money from the 'From Account' and adds it to the 
+	 * This transaction removes the requested amount of money from the 'From Account' and adds it to the 
 	 * 'To Account'
 	 */
 	
@@ -66,7 +66,7 @@ public class TestTransferScenarios {
 		
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
+		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to); // go to this function to find the fix
 		
 		//assert
 		
@@ -85,16 +85,18 @@ public class TestTransferScenarios {
 		//arrange
 		
 		double fromBalance=1000;
-		Account from= new Account("accountNumber1",1000,false);
+		// Account from= new Account("accountNumber1",1000,false);
+		Account from= new Account("accountNumber1",1000,true); // FIX --> last boolean isBlocked params were inverted before by accident between the two accounts 
 		
 		double toBalance=500;
-		Account to= new Account("accountNumber2",500,true);
+		// Account to= new Account("accountNumber2",500,true);
+		Account to= new Account("accountNumber2",500,false); // FIX --> last boolean isBlocked params were inverted before by accident between the two accounts
 		
 		double transferAmount= 100;
 		
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
+		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to); // go to this function to find the fix
 		
 		//assert
 		
@@ -113,16 +115,18 @@ public class TestTransferScenarios {
 		//arrange
 		
 		double fromBalance=1000;
-		Account from= new Account("accountNumber1",1000,false);
+		// Account from= new Account("accountNumber1",1000,false); // FIX --> this was the bug that made the last assert fail ... change to:
+		Account from= new Account("accountNumber1",fromBalance,false);
 		
 		double toBalance=500;
-		Account to= new Account("accountNumber1",1000,false);
+		// Account to= new Account("accountNumber1",1000,false); // FIX --> this was the bug that made the last assert fail ... change to:
+		Account to= new Account("accountNumber1",toBalance,false);
 		
 		double transferAmount= 100;
 		
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
+		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to); // go to this function to find the fix
 		
 		//assert
 		
@@ -150,7 +154,7 @@ public class TestTransferScenarios {
 		
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
+		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to); // go to this function to find the fix
 		
 		//assert
 		
@@ -175,11 +179,11 @@ public class TestTransferScenarios {
 		
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.Withdrawal(amount, account);
+		TransferStatus transferStatus= bankingCoreService.Withdrawal(amount, account); // go to this function to find the fix
 		
 		//assert
 		
-		assertThat(account.getBalance(),is(balance));		
+		assertThat(account.getBalance(),is(balance));	
 	}
 	
 	/*
@@ -197,7 +201,7 @@ public class TestTransferScenarios {
 		
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.Deposit(amount, account);
+		TransferStatus transferStatus= bankingCoreService.Deposit(amount, account); // go to this function to find the fix
 		
 		//assert
 		assertThat(account.getBalance(),is(balance));
@@ -221,7 +225,7 @@ public class TestTransferScenarios {
 		TransferStatus transferStatus= bankingCoreService.Deposit(amount, account);
 		
 		//assert
-		assertThat(transferStatus,is(TransferStatus.MaximumAllowedBalanceExceededError));
+		assertThat(transferStatus,is(TransferStatus.MaximumAllowedBalanceExceededError)); // go to this function to find the fix
 		assertThat(account.getBalance(),is(balance));
 
 	}
