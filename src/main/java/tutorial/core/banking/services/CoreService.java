@@ -17,9 +17,9 @@ public class CoreService {
 	private EmailSender emailSender;
 	private DataRepository dataRepository;
 
-	public CoreService(EmailSender emailSender,DataRepository dataRepository){
+	public CoreService(DataRepository dataRepository){
 	
-		this.emailSender=emailSender;
+		this.emailSender=new EmailSender();
 		this.dataRepository=dataRepository;
 	}
 	
@@ -105,6 +105,24 @@ public class CoreService {
 				emailSender.SendEmail("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 				return TransferStatus.Fraud;
 			}
+			
+			// in case of a TFSA account the amount should be less than the defined annual limits 
+			if(account.getType()==AccountType.TFSA) {
+			
+				int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+				
+				if(currentYear==2018 && amount>5500) {
+					return TransferStatus.TransferAmountIsNotValid;
+				}
+				
+				if(currentYear==2017 && amount>5500) {
+					return TransferStatus.TransferAmountIsNotValid;
+				}	
+				
+				if(currentYear==2017 && amount>6000) {
+					return TransferStatus.TransferAmountIsNotValid;
+				}	
+			}
 		
 			double newBalanace = account.getBalance()+amount;
 			account.setBalance(newBalanace);
@@ -128,20 +146,6 @@ public class CoreService {
 		}
 		
 		Account account = dataRepository.getAccountByAccountNumber(accountNumber);
-		
-		// in case of a TFSA account the amount should be less than the defined annual limits 
-		if(account.getType()==AccountType.TFSA) {
-		
-			int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-			
-			if(currentYear==2018 && amount>5000) {
-				return TransferStatus.TransferAmountIsNotValid;
-			}
-			
-			if(currentYear==2017 && amount>5000) {
-				return TransferStatus.TransferAmountIsNotValid;
-			}	
-		}
 		
 		if(account == null) {
 			FileBasedLogger.Log(LocalDateTime.now() + "account should not be null");

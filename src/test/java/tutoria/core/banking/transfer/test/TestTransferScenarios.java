@@ -66,16 +66,14 @@ public class TestTransferScenarios {
         when(dataRepository.getAccountByAccountNumber("accountNumber1")).thenReturn(from);
         when(dataRepository.getAccountByAccountNumber("accountNumber2")).thenReturn(to);
 
-		this.bankingCoreService =  new CoreService (emailSender,dataRepository);
+		this.bankingCoreService =  new CoreService (dataRepository);
 		
 		//act
 		
 		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, "accountNumber1", "accountNumber2");
 		
 		//assert
-		
-		assertThat(transferStatus,is(TransferStatus.Fraud));
-		
+				
 		// using verify() method, we make sure that the collaboration between collaborators is based on the defined requirements.
 	    verify(emailSender).SendEmail("secuityteam@nationalBank.ca", "Hello", anyString());
 
@@ -132,7 +130,7 @@ public class TestTransferScenarios {
         
         when(dataRepository.getAccountByAccountNumber("accountNumber2")).thenReturn(account);
         
-		this.bankingCoreService =  new CoreService (emailSender,dataRepository);
+		this.bankingCoreService =  new CoreService (dataRepository);
 
 		//act
 		
@@ -157,14 +155,14 @@ public class TestTransferScenarios {
 	public void DeposistsIntoTFSAAccountsWhichIsGreaterThanLimits_IsNotAllowed() throws Exception {
 				
 		//arrange
-		double balance=1000;
+		double balance=10000;
 		Account account= new Account("accountNumber1",balance,false,AccountType.TFSA);
 		double amount= 5501;
 		
         EmailSender emailSender = new EmailSender();
         DataRepository dataRepository = new DataRepository();
         
-		this.bankingCoreService =  new CoreService (emailSender,dataRepository);
+		this.bankingCoreService =  new CoreService (dataRepository);
 
 		//act
 		
@@ -186,7 +184,7 @@ public class TestTransferScenarios {
 	public void InCaseOfDatabaseFailing_SendEmailToDevOps()  throws Exception{
 		 
 		//arrange
-		double balance=1000;
+		double balance=10000;
 		Account account= new Account("accountNumber1",balance,false,AccountType.TFSA);
 		double amount= 5001;
 		
@@ -194,7 +192,7 @@ public class TestTransferScenarios {
         DataRepository dataRepository = new DataRepository();
         when(dataRepository.getAccountByAccountNumber("accountNumber2")).thenThrow(new InvalidParameterException());
         
-		this.bankingCoreService =  new CoreService (emailSender,dataRepository);
+		this.bankingCoreService =  new CoreService (dataRepository);
 
 		//act
 		
