@@ -2,26 +2,40 @@ package tutorial.core.banking.services;
 
 import java.net.ConnectException;
 import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 
 import tutorial.core.banking.data.DataRepository;
 import tutorial.core.banking.infrastructure.EmailSender;
+import tutorial.core.banking.infrastructure.FileBasedLogger;
 import tutorial.core.banking.models.Account;
+import tutorial.core.banking.models.AccountType;
 import tutorial.core.banking.models.TransferStatus;
 
 public class CoreService {
 
+	private EmailSender emailSender;
+	private DataRepository dataRepository;
 
-	public CoreService(EmailSender emailSender, DataRepository dataRepository, InterBankingService interBankingService){
-		
+	public CoreService(EmailSender emailSender,DataRepository dataRepository){
+	
+		this.emailSender=emailSender;
+		this.dataRepository=dataRepository;
 	}
 	
-	public TransferStatus TransferMoneyToAnotherAccount(double amount, Account fromAccount, Account toAccount) throws ConnectException {
+	public TransferStatus TransferMoneyToAnotherAccount(double amount, String fromAccountNumber,String toAccountNumber) throws Exception {
 			
-		if(amount<=0)
+		if(amount<=0) {
+			FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
 			throw new InvalidParameterException("amount should be greater than zero");
+		}
+			
+		Account fromAccount = dataRepository.getAccountByAccountNumber(fromAccountNumber);
 		
 		if(fromAccount == null)
 			throw new InvalidParameterException("account should not be null");
+		
+		Account toAccount = dataRepository.getAccountByAccountNumber(toAccountNumber);
 		
 		if(toAccount == null)
 			throw new InvalidParameterException("account should not be null");
@@ -41,63 +55,116 @@ public class CoreService {
 		if(IsAccountBlocked(fromAccount)) {
 			return TransferStatus.AccountIsBlockedError;
 		}
+		
+		if(IsAccountBlocked(toAccount)) {
+			return TransferStatus.AccountIsBlockedError;
+		}
 			
 		if(IsThisAFraudTransfer(amount,fromAccount)) {
 			fromAccount.setIsBlocked(true);
 			toAccount.setIsBlocked(true);
+			emailSender.SendEmail("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 			return TransferStatus.Fraud;			
 		}
 			
 		double toNewBalanace = toAccount.getBalance()+amount;
 		toAccount.setBalance(toNewBalanace);
 		
-		double fromNewBalanace = fromAccount.getBalance()+amount;
+		double fromNewBalanace = fromAccount.getBalance() - amount;
 		fromAccount.setBalance(fromNewBalanace);
+		
+		dataRepository.saveAccount(fromAccount);
+		dataRepository.saveAccount(toAccount);
 		
 		return TransferStatus.Valid;
 	}
 
 
-	public TransferStatus Deposit(double amount,  Account account) throws ConnectException {
+	public TransferStatus Deposit(double amount,  String accountNumber) throws Exception {
 				
-		if(amount<=0)
+		if(amount<=0) {
+			FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
 			throw new InvalidParameterException("amount should be greater than zero");
-		
-		if(account == null)
-			throw new InvalidParameterException("account should not be null");
-		
-		if(IsAccountBlocked(account)) {
-			return TransferStatus.AccountIsBlockedError;
 		}
 		
-		if(IsThisAFraudTransfer(amount,account)) {
-			account.setIsBlocked(true);
-			return TransferStatus.Fraud;
+		try {
+			
+			Account account = dataRepository.getAccountByAccountNumber(accountNumber);
+		
+			if(account == null) {
+				FileBasedLogger.Log(LocalDateTime.now() + "account should not be null");
+				throw new InvalidParameterException("account should not be null");
+			}
+					
+			if(IsAccountBlocked(account)) {
+				return TransferStatus.AccountIsBlockedError;
+			}
+		
+			if(IsThisAFraudTransfer(amount,account)) {
+				account.setIsBlocked(true);
+				emailSender.SendEmail("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+				return TransferStatus.Fraud;
+			}
+		
+			double newBalanace = account.getBalance()+amount;
+			account.setBalance(newBalanace);
+		
+			dataRepository.saveAccount(account);
+
+			return TransferStatus.Valid;
+		
+		}catch(java.net.ConnectException e){
+			emailSender.SendEmail("devops@rbc.com", "db is down", "fix it asap.");
+			return TransferStatus.Error;
 		}
-		
-		double newBalanace = account.getBalance()+amount;
-		account.setBalance(newBalanace);
-		
-		return TransferStatus.Valid;
 	}
 
 	
-	public TransferStatus Withdrawal(double amount,  Account account) throws ConnectException {
+	public TransferStatus Withdrawal(double amount,String accountNumber) throws Exception {
+		
+		if(amount<=0) {
+			FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
+			throw new InvalidParameterException("amount should be greater than zero");
+		}
+		
+		Account account = dataRepository.getAccountByAccountNumber(accountNumber);
+		
+		// in case of a TFSA account the amount should be less than the defined annual limits 
+		if(account.getType()==AccountType.TFSA) {
+		
+			int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+			
+			if(currentYear==2018 && amount>5000) {
+				return TransferStatus.TransferAmountIsNotValid;
+			}
+			
+			if(currentYear==2017 && amount>5000) {
+				return TransferStatus.TransferAmountIsNotValid;
+			}	
+		}
+		
+		if(account == null) {
+			FileBasedLogger.Log(LocalDateTime.now() + "account should not be null");
+			throw new InvalidParameterException("account should not be null");
+		}
 		
 		if(account.getBalance()<amount)
 			return TransferStatus.NotEnoughMoneyError;
-		
+				
 		if(IsAccountBlocked(account)) {
 			return TransferStatus.AccountIsBlockedError;
 		}
 		
 		if(IsThisAFraudTransfer(amount,account)) {
 			account.setIsBlocked(true);
+			emailSender.SendEmail("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 			return TransferStatus.Fraud;
 		}
 		
 		double newBalanace = account.getBalance()-amount;
 		account.setBalance(newBalanace);
+		
+		dataRepository.saveAccount(account);
 		
 		return TransferStatus.Valid;
 	}

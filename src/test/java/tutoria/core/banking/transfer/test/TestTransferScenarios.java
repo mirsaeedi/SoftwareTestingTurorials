@@ -1,5 +1,6 @@
 package tutoria.core.banking.transfer.test;
 
+import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +12,7 @@ import java.security.InvalidParameterException;
 import tutorial.core.banking.data.DataRepository;
 import tutorial.core.banking.infrastructure.EmailSender;
 import tutorial.core.banking.models.Account;
+import tutorial.core.banking.models.AccountType;
 import tutorial.core.banking.models.TransferStatus;
 import tutorial.core.banking.services.CoreService;
 import tutorial.core.banking.services.InterBankingService;
@@ -24,256 +26,184 @@ public class TestTransferScenarios {
 	
 	private CoreService bankingCoreService;
 
-	@Before
-	public void setup() {
-		
-		// in the setup method, we set up the system under test (SUT) and its collaborators.
-		// we do it once. So, inside the test methods we do not need to do it again and have a duplicated code all over.
-		
-		EmailSender emailSender = new EmailSender();
-		DataRepository dataRepository = new DataRepository();
-		InterBankingService interBankingService=new InterBankingService();
-		
-		this.bankingCoreService =  new CoreService (emailSender,dataRepository,interBankingService);
-	}
-	
 	/*.
-	 * There are some inconsistencies between these tests and the SUT (System Under Test) because developers 
-	 * have not implemented the requirements in a correct way.  
+	 * In this tutorial, the production code has external dependencies to an Email Sender, Database, File System, Time.
+	 * Since in unit test we want to test the behavior and logic of the code, if need to isolate the code from external dependencies.
+	 * Therefore, our tests will become fast and deterministic. So, you should:
+	 * 		1. Make the production code testable. (As of now, the code is not testable because its dependencies are hidden inside
+	 * its implementation. In other words, the dependencies are not mockable and we can not test the code) 
+	 * 		2. In tests you have to mock the dependencies.
+	 * 		3. Make all the tests to pass.
+	 */
+	
+	/*
+	 * Scenario (Requirement): When a money transfer is detected as a fraud transaction,
+	 * we should send an email to the security team ("security_team@rbc.ca") with subject "fraud".
 	 * 
-	 * 1. Run the tests and eliminate the bugs in the production code. Make all tests go Green
-	 * 2. Implement the Test method MoneyTransferThatResultsInFraud_IsNotAllowed (the last one)
-	 */
-	
-	/*
-	 * Scenario (Requirement): Transferring money from a normal account to another normal account is allowed.
-	 * This transaction removes the requested amount of money from the 'From Account' and adds it to the 
-	 * 'To Account'
+	 * 
+	 * Tasks: Fix the bugs inside the test code.
 	 */
 	
 	@Test
-	public void TransferMoneyFromOneNormalAccountToAnotherNormalAccount_IsOk() throws ConnectException {
+	public void IfMoneyTransferIsFraud_SendEmailToSecurity() throws Exception {
 		 
 		//arrange
 		
-		double fromBalance=1000;
-		Account from= new Account("accountNumber1",fromBalance,false);
+		double fromBalance=20000;
+		Account from= new Account("accountNumber1",fromBalance,false,AccountType.Checking);
 
 		double toBalance=500;
-		Account to= new Account("accountNumber2",toBalance,false);
+		Account to= new Account("accountNumber2",toBalance,false,AccountType.Checking);
+
+		// an amount greater than 1K $ leads to a fraud transfer
+		double transferAmount= 10001;
 		
-		double transferAmount= 100;
+		// here we mock the external dependencies in order to make the test fast, deterministic, and reliable
+        EmailSender emailSender = new EmailSender();
+        DataRepository dataRepository = mock(DataRepository.class);
+
+        // after creating mocks, we define their behavior. In other words, we stub them.
+        when(dataRepository.getAccountByAccountNumber("accountNumber1")).thenReturn(from);
+        when(dataRepository.getAccountByAccountNumber("accountNumber2")).thenReturn(to);
+
+		this.bankingCoreService =  new CoreService (emailSender,dataRepository);
 		
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
-		
-		//assert
-		
-		assertThat(transferStatus,is(TransferStatus.Valid));
-		assertThat(from.getBalance(),is(fromBalance-transferAmount));
-		assertThat(to.getBalance(),is(toBalance+transferAmount));
-	}
-	
-	/*
-	 * Scenario (Requirement): Transferring money from or to blocked accounts is not allowed.
-	 */
-
-	@Test
-	public void TransferMoneyFromABlockedAccountToANormalAccount_IsNotAllowed() throws ConnectException {
-		 
-		//arrange
-		
-		double fromBalance=1000;
-		Account from= new Account("accountNumber1",1000,true);
-		
-		double toBalance=500;
-		Account to= new Account("accountNumber2",500,false);
-		
-		double transferAmount= 100;
-		
-		//act
-		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
-		
-		//assert
-		
-		assertThat(transferStatus,is(TransferStatus.AccountIsBlockedError));
-		assertThat(from.getBalance(),is(fromBalance));
-		assertThat(to.getBalance(),is(toBalance));
-	}
-	
-	/*
-	 * Scenario (Requirement): Transferring money from an account to itself is considered as fraud. 
-	 * The account should get blocked
-	 */
-
-	@Test
-	public void TransferMoneyToTheSameAccount_IsNotAllowed() throws ConnectException {
-		 
-		//arrange
-		
-		double fromBalance=1000;
-		Account from= new Account("accountNumber1",fromBalance,false);
-		
-		double toBalance=500;
-		Account to= new Account("accountNumber1",toBalance,false);
-		
-		double transferAmount= 100;
-		
-		//act
-		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
+		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, "accountNumber1", "accountNumber2");
 		
 		//assert
 		
 		assertThat(transferStatus,is(TransferStatus.Fraud));
-		assertThat(from.getIsBlocked(),is(true));
-		assertThat(to.getIsBlocked(),is(true));
-		assertThat(from.getBalance(),is(fromBalance));
-		assertThat(to.getBalance(),is(toBalance));
+		
+		// using verify() method, we make sure that the collaboration between collaborators is based on the defined requirements.
+	    verify(emailSender).SendEmail("secuityteam@nationalBank.ca", "Hello", anyString());
+
 	}
 	
 	/*
-	 * Scenario (Requirement): Transferring money from or to blocked accounts is not allowed.
+	 * Scenario (Requirement): When a deposit into an account is detected as a fraud transaction
+	 * we should send an email to the security team ("security_team@rbc.ca") with subject "fraud".
+	 * 
+	 * Taks: Fill the blanks :D.
 	 */
 	
 	@Test
-	public void TransferMoneyFromANormalAccountToABlockedAccount_IsNotAllowed() throws ConnectException {
+	public void IfMoneyDepositIsFraud_SendEmailToSecurity() throws ConnectException {
 		 
 		//arrange
 		
-		double fromBalance=1000;
-		Account from= new Account("accountNumber1",1000,false);
+		double fromBalance=20000;
+		Account from= new Account("accountNumber1",fromBalance,false,AccountType.Checking);
 		
-		double toBalance=500;
-		Account to= new Account("accountNumber2",500,true);
+		// an amount greater than 1K $ leads to a fraud transfer
+		double transferAmount= 10001;
 		
-		double transferAmount= 100;
-		
-		//act
-		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
-		
-		//assert
-		
-		assertThat(transferStatus,is(TransferStatus.AccountIsBlockedError));
-		assertThat(from.getBalance(),is(fromBalance));
-		assertThat(to.getBalance(),is(toBalance));
-	}
-	
-	/*
-	 * Scenario (Requirement): The amount parameter of Withdrawal operation should be greater than zero, otherwise 
-	 * InvalidParameterException exception would be thrown
-	 */
-	
-	@Test(expected = InvalidParameterException.class)
-	public void WithdrawalWithNegativeAmount_IsNotAllowed() throws ConnectException {
-		 
-		//arrange
-		
-		double balance=1000;
-		Account account= new Account("accountNumber1",balance,false);
-		double amount= -100;
+		// next do mocking and stubbing
 		
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.Withdrawal(amount, account);
 		
 		//assert
-		
-		assertThat(account.getBalance(),is(balance));		
+
 	}
 	
 	/*
 	 * Scenario (Requirement): The amount parameter of Deposit operation should be greater than zero, otherwise 
 	 * InvalidParameterException exception would be thrown
+	 * 
+	 * 
+	 * Task: make the production code testable. It's now dependent on File System (its logger).
+	 * Then, mock all the dependencies.
 	 */
 	
 	@Test(expected = InvalidParameterException.class)
-	public void DepositWithNegativeAmount_IsNotAllowed() throws ConnectException {
+	public void NegativeAmountInMoneyDeposit_IsNotAllowed() throws Exception {
+		
 		 
 		//arrange
 		double balance=1000;
-		Account account= new Account("accountNumber1",balance,false);
+		Account account= new Account("accountNumber1",balance,false,AccountType.Checking);
 		double amount= -100;
 		
+		// here we mock the external dependencies in order to make the test fast, deterministic, and reliable
+        EmailSender emailSender = new EmailSender();
+        DataRepository dataRepository = mock(DataRepository.class);
+        
+        when(dataRepository.getAccountByAccountNumber("accountNumber2")).thenReturn(account);
+        
+		this.bankingCoreService =  new CoreService (emailSender,dataRepository);
+
 		//act
 		
-		TransferStatus transferStatus= bankingCoreService.Deposit(amount, account);
+		TransferStatus transferStatus= bankingCoreService.Deposit(amount, "accountNumber1");
+		
+		//assert
+		assertThat(account.getBalance(),is(balance));
+		
+	}
+	
+	/*
+	 * Scenario (Requirement): Deposits into TFSA accounts should stay within an annually limit. 
+	 * Canada Revenue Agency defines the yearly limits.
+	 * 1. the limit for 2017 is 5500 $
+	 * 1. the limit for 2018 is 5500 $
+	 * 1. the limit for 2019 is 6000 $
+	 * 
+	 * Task: make sure the code behaves well just for the year 2017.
+	 * The production code is coupled with time. So, you have to refactor the code to decouple it from time. 
+	 */
+	@Test
+	public void DeposistsIntoTFSAAccountsWhichIsGreaterThanLimits_IsNotAllowed() throws Exception {
+				
+		//arrange
+		double balance=1000;
+		Account account= new Account("accountNumber1",balance,false,AccountType.TFSA);
+		double amount= 5501;
+		
+        EmailSender emailSender = new EmailSender();
+        DataRepository dataRepository = new DataRepository();
+        
+		this.bankingCoreService =  new CoreService (emailSender,dataRepository);
+
+		//act
+		
+		TransferStatus transferStatus= bankingCoreService.Deposit(amount, "accountNumber1");
 		
 		//assert
 		assertThat(account.getBalance(),is(balance));
 	}
-
-	/*
-	 * Scenario (Requirement): Deposits that result in an account balance more than the allowed maximum,
-	 * should not proceed.
-	 */
 	
+	
+	/*
+	 * Scenario (Requirement): When depositing money, if the database is not accessible to our application, 
+	 * we have to inform the DevOps Team via an email to devops@rbc.com. The database is considered as not accessible when
+	 * accessing it causes java.net.ConnectException exception
+	 * 
+	 * Task: There is a bug in test code. And Also you need to fill the assert section to verify the behavior of collaborators
+	 */
 	@Test
-	public void DepositThatExceedsTheMaximumAllowedBalance_IsNotAllowed() throws ConnectException {
+	public void InCaseOfDatabaseFailing_SendEmailToDevOps()  throws Exception{
 		 
 		//arrange
 		double balance=1000;
-		Account account= new Account("accountNumber1",balance,false,2000);
-		double amount= 2000;
+		Account account= new Account("accountNumber1",balance,false,AccountType.TFSA);
+		double amount= 5001;
 		
-		//act
-		
-		TransferStatus transferStatus= bankingCoreService.Deposit(amount, account);
-		
-		//assert
-		assertThat(transferStatus,is(TransferStatus.MaximumAllowedBalanceExceededError));
-		assertThat(account.getBalance(),is(balance));
-
-	}
-	
-	/*
-	 * Scenario (Requirement): When transferring a money from one normal account to another normal account, 
-	 * the final amount of the destination account should not exceed the maximum allowed.
-	 */
-	
-	@Test
-	public void MoneyTransferThatExceedsTheMaximumAllowedBalance_IsNotAllowed() throws ConnectException {
-		 
-		//arrange
-		
-		double fromBalance=1000;
-		Account from= new Account("accountNumber1",fromBalance,false);
-		
-		double toBalance=1000;
-		Account to= new Account("accountNumber2",toBalance,false,1000);
-		double transferAmount= 2000;
-		
-		//act
-		
-		TransferStatus transferStatus= bankingCoreService.TransferMoneyToAnotherAccount(transferAmount, from, to);
-		
-		//assert
-		assertThat(transferStatus,is(TransferStatus.MaximumAllowedBalanceExceededError));
-		assertThat(from.getBalance(),is(toBalance));
-		assertThat(from.getBalance(),is(fromBalance));
-	}
-	
-	
-	/*
-	 * Scenario (Requirement): When transferring a money from one normal account to another normal account, 
-	 * transfers that are defined as FRAUD are not allowed to be done. A transaction is considered to be fraud if
-	 * the amount of transaction is more than 10K dollars. Both accounts should get blocked in such a scenario.
-	 */
-	
-	public void MoneyTransferThatResultsInFraud_IsNotAllowed() throws ConnectException {
-		 
-		//arrange
-		
+        EmailSender emailSender = new EmailSender();
+        DataRepository dataRepository = new DataRepository();
+        when(dataRepository.getAccountByAccountNumber("accountNumber2")).thenThrow(new InvalidParameterException());
+        
+		this.bankingCoreService =  new CoreService (emailSender,dataRepository);
 
 		//act
 		
+		TransferStatus transferStatus= bankingCoreService.Deposit(amount, "accountNumber1");
 		
 		//assert
-			
-		// don't forget to have assertions for all the asked consequences
+		
+		
+		
 	}
-
+	
 }

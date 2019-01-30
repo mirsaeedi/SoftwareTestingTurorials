@@ -7,6 +7,7 @@ public enum TransferStatus{
 	Error,
 	NotEnoughMoneyError,
 	AccountIsBlockedError,
-	MaximumAllowedBalanceExceededError
+	MaximumAllowedBalanceExceededError,
+	TransferAmountIsNotValid
 	
 }

@@ -6,17 +6,19 @@ public class Account {
 	private double balance;
 	private boolean isBlocked=false;
 	private double maxAllowedBalance;
+	private AccountType accountType;
 	
-	public Account(String accountNumber,double balance,boolean isBlocked) {
+	public Account(String accountNumber,double balance,boolean isBlocked,AccountType accountType) {
 		this.accountNumber=accountNumber;
 		this.balance=balance;
 		this.isBlocked=isBlocked;
+		this.accountType=accountType;
 		this.maxAllowedBalance=Double.MAX_VALUE;
 	}
 	
-	public Account(String accountNumber,double balance,boolean isBlocked,double maxAllowedBalance){
+	public Account(String accountNumber,double balance,boolean isBlocked,AccountType accountType,double maxAllowedBalance){
 		
-		this(accountNumber,balance,isBlocked);
+		this(accountNumber,balance,isBlocked,accountType);
 		this.maxAllowedBalance=maxAllowedBalance;
 	}
 	
@@ -34,6 +36,14 @@ public class Account {
 	
 	public boolean getIsBlocked() {
 		return this.isBlocked;
+	}
+	
+	public void setType(AccountType accountType) {
+		this.accountType=accountType;
+	}
+	
+	public AccountType getType() {
+		return this.accountType;
 	}
 	 
 	public double getMaxAllowedBalance() {
