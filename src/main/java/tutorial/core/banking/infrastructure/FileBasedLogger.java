@@ -6,7 +6,8 @@ public class FileBasedLogger implements ExternalDependency {
 	
 	private static Random rnd=new Random();
 	
-	public static void Log(String message) throws Exception {
+//	public static void Log(String message) throws Exception { // TODO FIX: remove static so the method is testable
+	public void Log(String message) throws Exception { // TODO FIX: remove static so the method is testable -- static methods are non mockable!
 		
 		// this logger writes to file system which is sloooow and non deterministic
 		

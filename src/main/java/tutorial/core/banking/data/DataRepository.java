@@ -1,5 +1,6 @@
 package tutorial.core.banking.data;
 
+import java.net.ConnectException;
 import java.util.Random;
 
 import tutorial.core.banking.infrastructure.ExternalDependency;
@@ -17,7 +18,7 @@ public class DataRepository implements ExternalDependency {
 		throw new UnsupportedOperationException("this feature is not implemented yet. another team is working on it"); 
 	}
 
-	public Account getAccountByAccountNumber(String accountNumber) {
+	public Account getAccountByAccountNumber(String accountNumber) throws ConnectException { // TODO add the checked exception for the last test
 		throw new UnsupportedOperationException("this feature is not implemented yet. another team is working on it"); 
 	}
 

@@ -8,6 +8,7 @@ import java.util.Calendar;
 import tutorial.core.banking.data.DataRepository;
 import tutorial.core.banking.infrastructure.EmailSender;
 import tutorial.core.banking.infrastructure.FileBasedLogger;
+import tutorial.core.banking.infrastructure.TimeManager;
 import tutorial.core.banking.models.Account;
 import tutorial.core.banking.models.AccountType;
 import tutorial.core.banking.models.TransferStatus;
@@ -16,17 +17,26 @@ public class CoreService {
 
 	private EmailSender emailSender;
 	private DataRepository dataRepository;
+	// TODO FIX: add the two other dependencies (logger and time) so the mocks can be created and injected in any test.
+	private FileBasedLogger fileBasedLogger;
+	private TimeManager timeManager;
 
-	public CoreService(EmailSender emailSender,DataRepository dataRepository){
-	
+	// NOTE: in the original code, email sender is not present in the constructor arguments (nor is fileBasedLogger)
+	// ... i.e. only dataRepository is made an explicit dependency, the two others are still present in the code but implicit. 
+	public CoreService(EmailSender emailSender, DataRepository dataRepository, FileBasedLogger fileBasedLogger, TimeManager timeManager){ 
+		// TODO: add the logger and time dependencies to constructor
 		this.emailSender=emailSender;
 		this.dataRepository=dataRepository;
+		this.fileBasedLogger=fileBasedLogger;
+		this.timeManager = timeManager;
 	}
 	
 	public TransferStatus TransferMoneyToAnotherAccount(double amount, String fromAccountNumber,String toAccountNumber) throws Exception {
 			
 		if(amount<=0) {
-			FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
+			//FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
+			this.fileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
+			// OPTIONAL: if you really wanted to, you could put this functionality as part of the TimeManager class: LocalDateTime.now();
 			throw new InvalidParameterException("amount should be greater than zero");
 		}
 			
@@ -83,7 +93,8 @@ public class CoreService {
 	public TransferStatus Deposit(double amount,  String accountNumber) throws Exception {
 				
 		if(amount<=0) {
-			FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
+//			FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
+			this.fileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
 			throw new InvalidParameterException("amount should be greater than zero");
 		}
 		
@@ -92,7 +103,8 @@ public class CoreService {
 			Account account = dataRepository.getAccountByAccountNumber(accountNumber);
 		
 			if(account == null) {
-				FileBasedLogger.Log(LocalDateTime.now() + "account should not be null");
+//				FileBasedLogger.Log(LocalDateTime.now() + "account should not be null");
+				this.fileBasedLogger.Log(LocalDateTime.now() + "account should not be null");
 				throw new InvalidParameterException("account should not be null");
 			}
 					
@@ -105,6 +117,26 @@ public class CoreService {
 				emailSender.SendEmail("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 				return TransferStatus.Fraud;
 			}
+			
+			// in case of a TFSA account the amount should be less than the defined annual limits 
+			if(account.getType()==AccountType.TFSA) {
+			
+				// int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+				// TODO FIX: this get year call needed to be moved to a separate class, 
+				// (which has a method like getCurrentYear() 
+				// and then that class should be injected as dependency in the constructor 
+				// and then used in any test)
+				int currentYear = timeManager.getCurrentYear();
+				
+				if(currentYear==2018 && amount>5000) {
+					return TransferStatus.TransferAmountIsNotValid;
+				}
+				
+				if(currentYear==2017 && amount>5000) {
+					return TransferStatus.TransferAmountIsNotValid;
+				}	
+			}
+
 		
 			double newBalanace = account.getBalance()+amount;
 			account.setBalance(newBalanace);
@@ -123,7 +155,8 @@ public class CoreService {
 	public TransferStatus Withdrawal(double amount,String accountNumber) throws Exception {
 		
 		if(amount<=0) {
-			FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
+//			FileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
+			this.fileBasedLogger.Log(LocalDateTime.now() + "amount should be greater than zero");
 			throw new InvalidParameterException("amount should be greater than zero");
 		}
 		
@@ -132,7 +165,12 @@ public class CoreService {
 		// in case of a TFSA account the amount should be less than the defined annual limits 
 		if(account.getType()==AccountType.TFSA) {
 		
-			int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+			// int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+			// TODO FIX: this get year call needed to be moved to a separate class, 
+			// (which has a method like getCurrentYear() 
+			// and then that class should be injected as dependency in the constructor 
+			// and then used in any test)
+			int currentYear = timeManager.getCurrentYear();
 			
 			if(currentYear==2018 && amount>5000) {
 				return TransferStatus.TransferAmountIsNotValid;
@@ -144,7 +182,8 @@ public class CoreService {
 		}
 		
 		if(account == null) {
-			FileBasedLogger.Log(LocalDateTime.now() + "account should not be null");
+//			FileBasedLogger.Log(LocalDateTime.now() + "account should not be null");
+			this.fileBasedLogger.Log(LocalDateTime.now() + "account should not be null");
 			throw new InvalidParameterException("account should not be null");
 		}
 		
