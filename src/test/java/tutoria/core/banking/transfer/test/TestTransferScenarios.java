@@ -33,7 +33,7 @@ public class TestTransferScenarios {
 	 * 		1. Make the production code testable. (As of now, the code is not testable because its dependencies are hidden inside
 	 * its implementation. In other words, the dependencies are not mockable and we can not test the code) 
 	 * 		2. In tests you have to mock the dependencies.
-	 * 		3. Make all the tests to pass.
+	 * 		3. Make all the tests pass.
 	 */
 	
 	/*
@@ -41,7 +41,7 @@ public class TestTransferScenarios {
 	 * we should send an email to the security team ("security_team@rbc.ca") with subject "fraud".
 	 * 
 	 * 
-	 * Tasks: Fix the bugs inside the test code.
+	 * Tasks: Fix the bugs inside the test code ()
 	 */
 	
 	@Test
@@ -75,7 +75,7 @@ public class TestTransferScenarios {
 		//assert
 				
 		// using verify() method, we make sure that the collaboration between collaborators is based on the defined requirements.
-	    verify(emailSender).SendEmail("secuityteam@nationalBank.ca", "Hello", anyString());
+	    verify(emailSender).SendEmail("security_team", "", "Hi Guys! Something here does not seem good :D");
 
 	}
 	
@@ -190,7 +190,7 @@ public class TestTransferScenarios {
 		
         EmailSender emailSender = new EmailSender();
         DataRepository dataRepository = new DataRepository();
-        when(dataRepository.getAccountByAccountNumber("accountNumber2")).thenThrow(new InvalidParameterException());
+        when(dataRepository.getAccountByAccountNumber("accountNumber1")).thenThrow(new InvalidParameterException());
         
 		this.bankingCoreService =  new CoreService (dataRepository);
 

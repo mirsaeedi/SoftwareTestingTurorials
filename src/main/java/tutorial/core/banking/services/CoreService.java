@@ -19,7 +19,7 @@ public class CoreService {
 
 	public CoreService(DataRepository dataRepository){
 	
-		this.emailSender=new EmailSender();
+		this.emailSender= new EmailSender();
 		this.dataRepository=dataRepository;
 	}
 	
@@ -63,7 +63,7 @@ public class CoreService {
 		if(IsThisAFraudTransfer(amount,fromAccount)) {
 			fromAccount.setIsBlocked(true);
 			toAccount.setIsBlocked(true);
-			emailSender.SendEmail("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+			emailSender.SendEmail("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 			return TransferStatus.Fraud;			
 		}
 			
@@ -102,7 +102,7 @@ public class CoreService {
 		
 			if(IsThisAFraudTransfer(amount,account)) {
 				account.setIsBlocked(true);
-				emailSender.SendEmail("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+				emailSender.SendEmail("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 				return TransferStatus.Fraud;
 			}
 			
@@ -111,15 +111,15 @@ public class CoreService {
 			
 				int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 				
+				if(currentYear==2017 && amount>5000) {
+					return TransferStatus.TransferAmountIsNotValid;
+				}	
+				
 				if(currentYear==2018 && amount>5500) {
 					return TransferStatus.TransferAmountIsNotValid;
 				}
 				
-				if(currentYear==2017 && amount>5500) {
-					return TransferStatus.TransferAmountIsNotValid;
-				}	
-				
-				if(currentYear==2017 && amount>6000) {
+				if(currentYear==2019 && amount>6000) {
 					return TransferStatus.TransferAmountIsNotValid;
 				}	
 			}
