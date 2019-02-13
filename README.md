@@ -6,7 +6,7 @@ In this tutorial you learn how to delegate the responsibily of object creation t
 
 You can find the task list inside [Startup.java](https://github.com/mirsaeedi/SoftwareTestingTurorials/blob/dependency_injection/src/main/java/Startup.java)
 
-The Slide Deck is uploaded [here](https://1drv.ms/b/s!AvPG99HJpJYfhppsc0C2PYjS6zjipA).
+The Slide Deck is uploaded [here](https://1drv.ms/b/s!AvPG99HJpJYfhppzeMTtmADprGpAGw).
 
 
 # Fetch the bits
