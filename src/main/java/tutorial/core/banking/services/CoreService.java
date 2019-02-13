@@ -1,6 +1,5 @@
 package tutorial.core.banking.services;
 
-import java.net.ConnectException;
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.util.Calendar;
@@ -63,7 +62,7 @@ public class CoreService {
 		if(IsThisAFraudTransfer(amount,fromAccount)) {
 			fromAccount.setIsBlocked(true);
 			toAccount.setIsBlocked(true);
-			emailSender.SendEmail("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+			emailSender.SendMessage("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 			return TransferStatus.Fraud;			
 		}
 			
@@ -102,7 +101,7 @@ public class CoreService {
 		
 			if(IsThisAFraudTransfer(amount,account)) {
 				account.setIsBlocked(true);
-				emailSender.SendEmail("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+				emailSender.SendMessage("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 				return TransferStatus.Fraud;
 			}
 			
@@ -132,7 +131,7 @@ public class CoreService {
 			return TransferStatus.Valid;
 		
 		}catch(java.net.ConnectException e){
-			emailSender.SendEmail("devops@rbc.com", "db is down", "fix it asap.");
+			emailSender.SendMessage("devops@rbc.com", "db is down", "fix it asap.");
 			return TransferStatus.Error;
 		}
 	}
@@ -161,7 +160,7 @@ public class CoreService {
 		
 		if(IsThisAFraudTransfer(amount,account)) {
 			account.setIsBlocked(true);
-			emailSender.SendEmail("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+			emailSender.SendMessage("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 			return TransferStatus.Fraud;
 		}
 		
