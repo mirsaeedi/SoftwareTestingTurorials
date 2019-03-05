@@ -173,12 +173,12 @@ public class CoreService {
 		return TransferStatus.Valid;
 	}
 
-	private boolean IsThisAFraudTransfer(double amount, Account account) {
+	public boolean IsThisAFraudTransfer(double amount, Account account) {
 		
 		// Use some fancy machine learning techniques to detect fraud transfers.
 		// however, here we have a super simple way to check it.
 		
-		if(amount>10000)
+		if(amount>5000)
 			return true;
 		
 		return false;
