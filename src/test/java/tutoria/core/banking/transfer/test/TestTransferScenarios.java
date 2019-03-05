@@ -31,16 +31,6 @@ public class TestTransferScenarios {
 	
 	@InjectMocks
 	private CoreService bankingCoreService;
-
-	
-	/*
-	 * Scenario (Requirement): When a money transfer is detected as a fraud transaction,
-	 * we should send an email to the security team ("security_team@rbc.ca") with subject "fraud".
-	 * 
-	 * 
-	 * Tasks: Test Code should not be coupled with the production code.
-	 * Chagnes in production code should not force you to change all your test codes
-	 */
 	
 	@Test
 	public void IfMoneyDepositIsFraud_SendEmailToSecurity() throws Exception {

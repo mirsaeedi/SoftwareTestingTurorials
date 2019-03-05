@@ -16,9 +16,9 @@ public class CoreService {
 	private EmailSender emailSender;
 	private DataRepository dataRepository;
 
-	public CoreService(DataRepository dataRepository){
+	public CoreService(DataRepository dataRepository, EmailSender emailSender){
 	
-		this.emailSender= new EmailSender();
+		this.emailSender= emailSender;
 		this.dataRepository=dataRepository;
 	}
 	
