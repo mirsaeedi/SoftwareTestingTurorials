@@ -7,18 +7,19 @@ import java.util.Calendar;
 import tutorial.core.banking.data.DataRepository;
 import tutorial.core.banking.infrastructure.EmailSender;
 import tutorial.core.banking.infrastructure.FileBasedLogger;
+import tutorial.core.banking.infrastructure.IMessageSender;
 import tutorial.core.banking.models.Account;
 import tutorial.core.banking.models.AccountType;
 import tutorial.core.banking.models.TransferStatus;
 
 public class CoreService {
 
-	private EmailSender emailSender;
+	private IMessageSender messageSender;
 	private DataRepository dataRepository;
 
-	public CoreService(DataRepository dataRepository, EmailSender emailSender){
+	public CoreService(DataRepository dataRepository, IMessageSender messageSender){
 	
-		this.emailSender= emailSender;
+		this.messageSender= messageSender;
 		this.dataRepository=dataRepository;
 	}
 	
@@ -62,7 +63,7 @@ public class CoreService {
 		if(IsThisAFraudTransfer(amount,fromAccount)) {
 			fromAccount.setIsBlocked(true);
 			toAccount.setIsBlocked(true);
-			emailSender.SendMessage("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+			messageSender.SendMessage("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 			return TransferStatus.Fraud;			
 		}
 			
@@ -101,7 +102,7 @@ public class CoreService {
 		
 			if(IsThisAFraudTransfer(amount,account)) {
 				account.setIsBlocked(true);
-				emailSender.SendMessage("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+				messageSender.SendMessage("security_team@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 				return TransferStatus.Fraud;
 			}
 			
@@ -131,7 +132,7 @@ public class CoreService {
 			return TransferStatus.Valid;
 		
 		}catch(java.net.ConnectException e){
-			emailSender.SendMessage("devops@rbc.com", "db is down", "fix it asap.");
+			messageSender.SendMessage("devops@rbc.com", "db is down", "fix it asap.");
 			return TransferStatus.Error;
 		}
 	}
@@ -160,7 +161,7 @@ public class CoreService {
 		
 		if(IsThisAFraudTransfer(amount,account)) {
 			account.setIsBlocked(true);
-			emailSender.SendMessage("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
+			messageSender.SendMessage("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 			return TransferStatus.Fraud;
 		}
 		
