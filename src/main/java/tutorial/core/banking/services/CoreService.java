@@ -178,7 +178,7 @@ public class CoreService {
 		// Use some fancy machine learning techniques to detect fraud transfers.
 		// however, here we have a super simple way to check it.
 		
-		if(amount>5000)
+		if(amount>10000)
 			return true;
 		
 		return false;
