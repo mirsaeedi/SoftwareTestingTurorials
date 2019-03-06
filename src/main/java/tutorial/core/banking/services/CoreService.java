@@ -185,7 +185,7 @@ public class CoreService {
 	}
 	
 	private boolean DoesItHaveEnoughMoneyToTransfer(Account account,double amount) {
-		 return account.getBalance()<=amount;
+		 return account.getBalance()>=amount;
 	}
 	
 	private boolean IsAccountBlocked(Account account) {
