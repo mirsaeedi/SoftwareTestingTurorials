@@ -160,7 +160,7 @@ public class CoreService {
 		}
 		
 		if(IsThisAFraudTransfer(amount,account)) {
-			account.setIsBlocked(false);
+			account.setIsBlocked(true);
 			messageSender.SendMessage("secuityteam@rbc.ca", "fraud", "Hi Guys! Something here does not seem good :D");
 			return TransferStatus.Fraud;
 		}
