@@ -4,8 +4,6 @@ We have both the [Production code](https://github.com/mirsaeedi/SoftwareTestingT
 
 In this tutorial you learn how to make the code testable and how to isolate the code from its external dependencies and their unwanted consequences.
 
-The Slide Deck is uploaded [here](https://1drv.ms/b/s!AvPG99HJpJYfhppsc0C2PYjS6zjipA).
-
 # Fetch the bits
 
 ```
