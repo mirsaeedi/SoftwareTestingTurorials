@@ -25,7 +25,7 @@ import tutorial.core.banking.services.InterBankingService;
  * 
  *  your job is to find the bug inducing commit using git_bisect.
  *  
- *  you can automate git-bisect using "git bisect run ./gradle ./gradlew test --tests  *.{testclassname}.{testmethodname}"
+ *  you can automate git-bisect using "git bisect run ./gradlew test --tests  *.{testclassname}.{testmethodname}"
  */
 
 
