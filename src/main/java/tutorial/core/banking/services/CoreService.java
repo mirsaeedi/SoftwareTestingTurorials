@@ -170,7 +170,7 @@ public class CoreService {
 		
 		dataRepository.saveAccount(account);
 		
-		return TransferStatus.Fraud;
+		return TransferStatus.Valid;
 	}
 
 	public boolean IsThisAFraudTransfer(double amount, Account account) {
