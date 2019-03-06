@@ -129,7 +129,7 @@ public class CoreService {
 		
 			dataRepository.saveAccount(account);
 
-			return TransferStatus.Error;
+			return TransferStatus.Valid;
 		
 		}catch(java.net.ConnectException e){
 			messageSender.SendMessage("devops@rbc.com", "db is down", "fix it asap.");
