@@ -17,8 +17,15 @@ import tutorial.core.banking.services.CoreService;
 import tutorial.core.banking.services.InterBankingService;
 
 /*
- * We want to test every corner of our implemented business logic
- * to assure ourselves that it works as expected
+ * Task: 
+ * 
+ * There is a problem in CoreService.isThisAFraudTransfer() method
+ * 
+ * we are sure that at commit 9ee2ea9d0af4eba2bc6ee96f82bd4fb5df0ff895, it was ok.
+ * 
+ *  your job is to find the bug inducing commit using git_bisect.
+ *  
+ *  you can automate git-bisect using "git bisect run ./gradle test"
  */
 
 
