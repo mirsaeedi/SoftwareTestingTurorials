@@ -194,7 +194,7 @@ public class CoreService {
 
 	private boolean DoesItExceedTheMaximumAllowedBalance(double amount, Account account) {
 		
-		return account.getBalance()+amount>account.getMaxAllowedBalance();
+		return account.getBalance()+amount<account.getMaxAllowedBalance();
 	}
 	
 }
