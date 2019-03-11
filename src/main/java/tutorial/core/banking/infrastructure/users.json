@@ -1,0 +1,13 @@
+[{
+ "name":"ehsan",
+ "id":1,
+ "accounts":
+ [{
+	"accountNumber":"21398123712983",
+	"balance":1000,
+	"isBlocked":"false",
+	"accountType":"Saving",
+	"maxAllowedBalance":2000
+ }
+ ]
+}]

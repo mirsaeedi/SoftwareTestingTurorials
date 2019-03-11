@@ -29,6 +29,8 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.+'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    
      //Guice
     compile group: 'com.google.inject', name: 'guice', version: '4.+'
 }

@@ -1,18 +1,27 @@
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import java.util.concurrent.TimeUnit;
 
-import tutorial.core.banking.configuration.BankDependenciesModule;
-import tutorial.core.banking.data.DataRepository;
-import tutorial.core.banking.services.CoreService;
+import tutorial.core.banking.consistency.ConsitencyChecker;
+import tutorial.core.banking.models.User;
 
 public class Startup {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 	    
-		
-	    Injector injector = Guice.createInjector(new BankDependenciesModule());
-	    CoreService coreService = injector.getInstance(CoreService.class);
-	    
+		RunConsistencyChecking();
 	}
-
+	
+    public static void RunConsistencyChecking() throws InterruptedException {
+    	
+    	// first you need to instantiate consitencyChecker with correct parameters
+    	ConsitencyChecker<User> consitencyChecker = null;
+    
+    	while(true) {
+    		
+    		consitencyChecker.check();
+    		
+    		// here we just simulate
+			TimeUnit.SECONDS.sleep(1);
+    	}
+    	
+    }
 }
