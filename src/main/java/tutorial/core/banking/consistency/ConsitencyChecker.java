@@ -11,7 +11,7 @@ public class ConsitencyChecker<TUnit extends IUnit> {
 	private IRule<TUnit>[] rules;
 	private IRepository<TUnit> repository;
 	
-	public ConsitencyChecker(IMessageSender messageSender, IRule<TUnit>[] rules, IRepository<TUnit> repository) {
+	public ConsitencyChecker(IMessageSender messageSender, IRepository<TUnit> repository, IRule<TUnit>...rules) {
 		
 		this.messageSender=messageSender;
 		this.rules=rules;

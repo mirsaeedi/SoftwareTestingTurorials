@@ -31,7 +31,7 @@ public class Violation {
 	@Override
 	public String toString() {
 	
-		String result = "{Violation Code: " + this.code + "},{Description: }" + this.description;
+		String result = "{Violation Code: " + this.code + "} , {Description:" + this.description + " }";
 		return result;
 	}
 	
