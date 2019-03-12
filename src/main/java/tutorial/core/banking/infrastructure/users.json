@@ -1,13 +1,85 @@
 [{
- "name":"ehsan",
+ "name":"Alice",
  "id":1,
+ "balance": 1810,
  "accounts":
- [{
-	"accountNumber":"21398123712983",
-	"balance":1000,
-	"isBlocked":"false",
-	"accountType":"Saving",
-	"maxAllowedBalance":2000
- }
- ]
+	[
+		{
+			"accountNumber":"21398123712983",
+			"balance":1000,
+			"isBlocked":"false",
+			"accountType":"Saving",
+			"maxAllowedBalance":2000
+		},
+		{
+			"accountNumber":"987328712831231",
+			"balance":810,
+			"isBlocked":"false",
+			"accountType":"Saving",
+			"maxAllowedBalance":3000
+		}
+	]
+},
+ "name":"John",
+ "id":2,
+ "balance": 5500,
+ "accounts":
+	[
+		{
+			"accountNumber":"3094898324782934",
+			"balance":1000,
+			"isBlocked":"false",
+			"accountType":"TFSA",
+			"maxAllowedBalance":0
+		},
+		{
+			"accountNumber":"219837219839812739",
+			"balance":4500,
+			"isBlocked":"false",
+			"accountType":"TFSA",
+			"maxAllowedBalance":0
+		}
+	]
+}
+ "name":"Alex",
+ "id":3,
+ "balance": 11450,
+ "accounts":
+	[
+		{
+			"accountNumber":"9823749824982379482",
+			"balance":6000,
+			"isBlocked":"false",
+			"accountType":"Checking",
+			"maxAllowedBalance":0
+		},
+		{
+			"accountNumber":"0939217387214123",
+			"balance":5500,
+			"isBlocked":"false",
+			"accountType":"Saving",
+			"maxAllowedBalance":0
+		}
+	]
+}, 
+ "name":"Maria",
+ "id":4,
+ "balance": 11050,
+ "accounts":
+	[
+		{
+			"accountNumber":"98237423424982379482",
+			"balance":6000,
+			"isBlocked":"false",
+			"accountType":"Saving",
+			"maxAllowedBalance":2000
+		},
+		{
+			"accountNumber":"665324023948283876",
+			"balance":5500,
+			"isBlocked":"false",
+			"accountType":"Saving",
+			"maxAllowedBalance":0
+		}
+	]
 }]
