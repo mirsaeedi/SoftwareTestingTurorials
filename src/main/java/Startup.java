@@ -9,7 +9,7 @@ public class Startup {
 
 	public static void main(String[] args) throws InterruptedException {
 	    
-		// Rules that you need to have checker for them to check the consistency of Users are:
+		// Tasks: Rules that you need to have checker for them to check the consistency of Users are:
 		// 1. User's Balance value should be equal to the sum of accounts' balance values
 		// 2. A user can only have exactly one TFSA and RRSP account
 		// 3. The balance of an account should be always smaller or equal to maxAllowedBalance except when maxAllowedBalance=0  
