@@ -8,10 +8,10 @@ import tutorial.core.banking.infrastructure.IMessageSender;
 public class ConsitencyChecker<TUnit extends IUnit> {
 
 	private IMessageSender messageSender;
-	private IRule<TUnit>[] rules;
+	private IChecker<TUnit>[] rules;
 	private IRepository<TUnit> repository;
 	
-	public ConsitencyChecker(IMessageSender messageSender, IRepository<TUnit> repository, IRule<TUnit>...rules) {
+	public ConsitencyChecker(IMessageSender messageSender, IRepository<TUnit> repository, IChecker<TUnit>...rules) {
 		
 		this.messageSender=messageSender;
 		this.rules=rules;
@@ -32,7 +32,7 @@ public class ConsitencyChecker<TUnit extends IUnit> {
 	private void check(TUnit unit) {
 		
 		
-		for(IRule<TUnit> rule : rules) {
+		for(IChecker<TUnit> rule : rules) {
 			Violation[] violations =  rule.check(unit);
 			
 			reportViolations(violations);
