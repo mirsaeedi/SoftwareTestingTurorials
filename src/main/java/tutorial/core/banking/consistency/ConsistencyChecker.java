@@ -5,13 +5,13 @@ import java.net.ConnectException;
 import tutorial.core.banking.data.IRepository;
 import tutorial.core.banking.infrastructure.IMessageSender;
 
-public class ConsitencyChecker<TUnit extends IUnit> {
+public class ConsistencyChecker<TUnit extends IUnit> {
 
 	private IMessageSender messageSender;
 	private IChecker<TUnit>[] rules;
 	private IRepository<TUnit> repository;
 	
-	public ConsitencyChecker(IMessageSender messageSender, IRepository<TUnit> repository, IChecker<TUnit>...rules) {
+	public ConsistencyChecker(IMessageSender messageSender, IRepository<TUnit> repository, IChecker<TUnit>...rules) {
 		
 		this.messageSender=messageSender;
 		this.rules=rules;
