@@ -17,14 +17,14 @@
 * In which thread/process the event occured?
 
 So, we can diagnose our application more easily. Add the following fields to the pattern layout of ConsoleAppender. You can get help from [log4j documents](https://logging.apache.org/log4j/2.x/manual/layouts.html#PatternLayout) for finding relevant pattern codes.
-  - Log Level
-  - Date
-  - Method Name
-  - Class Name
-  - Line Number
-  - Thread Name 
-  - Thread Id
-  - Process Id
+  - Log Level %p
+  - Date %d{HH:mm:ss,SSS}
+  - Method Name %M (it's slow)
+  - Class Name %C (it's slow)
+  - Line Number %L (it's slow)
+  - Thread Name %t
+  - Thread Id %tid
+  - Process Id %pid
 
 TASK 4: In web applications, we need to have some information about the user (username,sessionsId,IP,URL) to be able to deal with problems in production environment. Use [*Thread Context Map* (key/value)](https://logging.apache.org/log4j/2.x/manual/thread-context.html) to provide log4j with contextual data. So, the contextual data will be logged alongside the message and other parameters. You can get help from [here](https://howtodoinjava.com/log4j2/threadcontext-fish-tagging/).
 
