@@ -5,11 +5,18 @@
 
 # Steps
 
-0. The log4j setting file is located inside *src/main/java* and is named [log4j2.xml](https://github.com/mirsaeedi/MockingDependencies/blob/logging/MockingDependencies/src/main/java/log4j2.xml) by convention. You can learn about file naming convention on [log4j documents](https://logging.apache.org/log4j/2.x/manual/configuration.html). In this hands-on, we are going to improve the logging inside the [CoreService class](https://github.com/mirsaeedi/MockingDependencies/blob/logging/MockingDependencies/src/main/java/tutorial/core/banking/CoreService.java).
+**Task 1**: The log4j setting file is located inside *src/main/java* and is named [log4j2.xml](https://github.com/mirsaeedi/SoftwareTestingTurorials/tree/logging/src/main/java/log4j2.xml) by convention. You can learn about file naming convention on [log4j documents](https://logging.apache.org/log4j/2.x/manual/configuration.html). In this hands-on, we are going to improve the logging inside the [CoreService class](https://github.com/mirsaeedi/SoftwareTestingTurorials/blob/logging/src/main/java/tutorial/core/banking/services/CoreService.java).
 
-1. Modify the log4j2.xml and set the Root Logger to use the defined ConsoleAppender. So, you can see the logs inside the console. Then, run the main method inside tutorial.core.banking package to see the logs.
+**TASK 2**: We want to see the logs on Console.So, Modify log4j2.xml and set the Root Logger to use ConsoleAppender.
 
-2. In real-world scenarios, we need a way more information to make our logs helpful. You should enrich the logs by adding additional fields to the PatternLayout of ConsoleAppender. So, we can diagnose our application more easily. Add the following fields to the pattern layout of ConsoleAppender. You can get help from [log4j documents](https://logging.apache.org/log4j/2.x/manual/layouts.html) for finding relevant pattern codes.
+**TASK 3**: In real-world scenarios, we need a way more information to make our logs helpful. You should enrich the logs by adding additional fields to the PatternLayout of ConsoleAppender. So, we should be able to answer following questions.
+
+* At what time has the event occured?
+* In which method/class has the event occured?
+* In which line has the event occured?
+* In which thread/process the event occured?
+
+So, we can diagnose our application more easily. Add the following fields to the pattern layout of ConsoleAppender. You can get help from [log4j documents](https://logging.apache.org/log4j/2.x/manual/layouts.html#PatternLayout) for finding relevant pattern codes.
   - Log Level
   - Date
   - Method Name
