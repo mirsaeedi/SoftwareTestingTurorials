@@ -5,7 +5,7 @@
 
 # Steps
 
-**Task 1**: The log4j setting file is located inside *src/main/java* and is named [log4j2.xml](https://github.com/mirsaeedi/SoftwareTestingTurorials/tree/logging/src/main/java/log4j2.xml) by convention. You can learn about file naming convention on [log4j documents](https://logging.apache.org/log4j/2.x/manual/configuration.html). In this hands-on, we are going to improve the logging inside the [CoreService class](https://github.com/mirsaeedi/SoftwareTestingTurorials/blob/logging/src/main/java/tutorial/core/banking/services/CoreService.java).
+**TASK 1**: The log4j setting file is located inside *src/main/java* and is named [log4j2.xml](https://github.com/mirsaeedi/SoftwareTestingTurorials/tree/logging/src/main/java/log4j2.xml) by convention. You can learn about file naming convention on [log4j documents](https://logging.apache.org/log4j/2.x/manual/configuration.html). In this hands-on, we are going to improve the logging inside the [CoreService class](https://github.com/mirsaeedi/SoftwareTestingTurorials/blob/logging/src/main/java/tutorial/core/banking/services/CoreService.java).
 
 **TASK 2**: We want to see the logs on Console.So, Modify log4j2.xml and set the Root Logger to use ConsoleAppender.
 
@@ -26,7 +26,6 @@ So, we can diagnose our application more easily. Add the following fields to the
   - Thread Id
   - Process Id
 
-3. A good Logging practice should help us to answer What, When, Who questions. So, usually, we need to enrich our logs with some information about the context of the request/operation. For example, in web applications, we need to know the username, IP address, requested URL and session id in order to diagnose the problem. 
-In our sample application, we have an HTTP context filled with fake information. You should implement the [*IntializeContextualLogging*](https://github.com/mirsaeedi/MockingDependencies/blob/logging/MockingDependencies/src/main/java/tutorial/core/banking/Main.java) method by using the *HttpContext* class and *Thread Context Map* (key/value) to provide log4j with contextual data. So, the contextual data will be logged alongside the message and other parameters. You can get help from [log4j documents](https://logging.apache.org/log4j/2.x/manual/thread-context.html) and [here](https://howtodoinjava.com/log4j2/threadcontext-fish-tagging/).
+TASK 4: In web applications, we need to have some information about the user (username,sessionsId,IP,URL) to be able to deal with problems in production environment. Use *Thread Context Map* (key/value) to provide log4j with contextual data. So, the contextual data will be logged alongside the message and other parameters. You can get help from [log4j documents](https://logging.apache.org/log4j/2.x/manual/thread-context.html) and [here](https://howtodoinjava.com/log4j2/threadcontext-fish-tagging/).
 
-4. Change the appender to RollingFileAppender. Run the program again and take a look at the created file. Then, run the program once more. Take a look at the log folder again. Make sure you know what are the used policies. You can read about them [here](https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender).  
+TASK 5: make the program to use both Consoler and RollingFileAppender at the same time. Make sure you know what are the used policies. You can read about them [here](https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender).  
