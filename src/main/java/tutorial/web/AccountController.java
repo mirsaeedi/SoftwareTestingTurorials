@@ -1,7 +1,5 @@
 package tutorial.web;
 
-import org.apache.logging.log4j.ThreadContext;
-
 import tutorial.core.banking.models.Account;
 import tutorial.core.banking.models.AccountType;
 import tutorial.core.banking.services.CoreService;
@@ -10,8 +8,7 @@ public class AccountController {
 	 
 	public AccountController(HttpSession httpSession){
 		
-		ThreadContext.put("ipAddress", httpSession.IpAddress);
-		
+		//ThreadContext.put("ipAddress", httpSession.IpAddress);
 	}
     
     public void TransferMoney() {
@@ -29,3 +26,4 @@ public class AccountController {
 		}
     }
 }
+

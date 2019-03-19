@@ -4,11 +4,8 @@
 		<Console name="ConsoleAppender" target="SYSTEM_OUT">
     		<PatternLayout>
     	    </PatternLayout>
-        	<Filters>
-    			<BurstFilter level="INFO"/>
-			</Filters>
 		</Console>
-		<RollingFile name="RollingFileAppender" fileName="logs/app.log" filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+		<RollingFile name="RollingFileAppender" fileName="logs/" filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
         <PatternLayout>
             <Pattern></Pattern>
         </PatternLayout>
@@ -21,7 +18,6 @@
 	</Appenders>
 	<Loggers>
 	<Root level="all">
-
     </Root>
 	</Loggers>
 </Configuration>
