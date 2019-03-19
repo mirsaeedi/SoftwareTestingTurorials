@@ -26,6 +26,6 @@ So, we can diagnose our application more easily. Add the following fields to the
   - Thread Id %tid
   - Process Id %pid
 
-TASK 4: In web applications, we need to have some information about the user (username,sessionsId,IP,URL) to be able to deal with problems in production environment. Use [*Thread Context Map* (key/value)](https://logging.apache.org/log4j/2.x/manual/thread-context.html) to provide log4j with contextual data. So, the contextual data will be logged alongside the message and other parameters. You can get help from [here](https://howtodoinjava.com/log4j2/threadcontext-fish-tagging/).
+**TASK 4**: In web applications, we need to have some information about the user (username,sessionsId,IP,URL) to be able to deal with problems in production environment. Use [*Thread Context Map* (key/value)](https://logging.apache.org/log4j/2.x/manual/thread-context.html) to provide log4j with contextual data. So, the contextual data will be logged alongside the message and other parameters. You can get help from [here](https://howtodoinjava.com/log4j2/threadcontext-fish-tagging/).
 
-TASK 5: make the program to use both Consoler and RollingFileAppender at the same time. Make sure you know what are the used policies. You can read about them [here](https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender).  
+**TASK 5**: make the program to use both Consoler and RollingFileAppender at the same time. Make sure you know what are the used policies. You can read about them [here](https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender).  
