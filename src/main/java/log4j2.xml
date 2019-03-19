@@ -5,15 +5,16 @@
     		<PatternLayout>
     	    </PatternLayout>
 		</Console>
-		<RollingFile name="RollingFileAppender" fileName="logs/" filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+		<RollingFile name="RollingFileAppender" fileName="logs/log.log" filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
         <PatternLayout>
-            <Pattern></Pattern>
+            <Pattern>%m%n</Pattern>
         </PatternLayout>
         <Policies>
             <OnStartupTriggeringPolicy />
             <SizeBasedTriggeringPolicy size="50 MB" />
         </Policies>
         <DefaultRolloverStrategy max="20" />
+        <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
     </RollingFile>
 	</Appenders>
 	<Loggers>
