@@ -1,18 +1,23 @@
 package tutorial.core.banking.services;
 import java.security.InvalidParameterException;
 
-import tutorial.core.banking.data.DataRepository;
 import tutorial.core.banking.infrastructure.EmailSender;
+import tutorial.core.banking.infrastructure.TextSender;
 import tutorial.core.banking.models.Account;
 import tutorial.core.banking.models.TransferStatus;
 
 public class CoreService {
 
+	private Boolean isEmailEnabled = false;
+	private Boolean isTextEnabled = false;
+	
 	private EmailSender emailSender;
+	private TextSender textSender;
 	
 
 	public CoreService(){
 	
+		textSender = new TextSender();
 		emailSender = new EmailSender();
 	}
 	
@@ -38,8 +43,14 @@ public class CoreService {
 		double newBalanace = account.getBalance()+amount;
 		account.setBalance(newBalanace);
 
-		// feature not released, toggled out:
-		// emailSender.SendMessage(account.getEmail(),"Successful Transaction", "Thank you for using our service!");
+
+		if(isEmailEnabled) {
+			emailSender.SendMessage(account.getEmail(),"Successful Transaction", "Thank you for using our service!");	
+		}
+		
+		if(isTextEnabled) {
+			textSender.SendMessage(account.getPhoneNumber(),"Successful Transaction", "Thank you for using our service!");	
+		}
 		
 
 		return TransferStatus.Valid;
@@ -72,8 +83,13 @@ public class CoreService {
 		double newBalanace = account.getBalance()-amount;
 		account.setBalance(newBalanace);
 		
-		// feature not released, toggled out:
-		// emailSender.SendMessage(account.getEmail(),"Successfull Transaction", "Thank you for using our service!");
+		if(isEmailEnabled) {
+			emailSender.SendMessage(account.getEmail(),"Successful Transaction", "Thank you for using our service!");	
+		}
+		
+		if(isTextEnabled) {
+			textSender.SendMessage(account.getPhoneNumber(),"Successful Transaction", "Thank you for using our service!");	
+		}
 		
 		return TransferStatus.Valid;
 	}
