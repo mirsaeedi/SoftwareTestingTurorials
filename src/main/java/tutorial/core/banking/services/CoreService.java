@@ -1,26 +1,16 @@
 package tutorial.core.banking.services;
 import java.security.InvalidParameterException;
 
-import tutorial.core.banking.infrastructure.EmailSender;
-import tutorial.core.banking.infrastructure.TextSender;
+import tutorial.core.banking.features.BaseMessagingFeature;
 import tutorial.core.banking.models.Account;
 import tutorial.core.banking.models.TransferStatus;
 
 public class CoreService {
 
-	private Boolean isEmailEnabled;
-	private Boolean isTextEnabled;
-	
-	private EmailSender emailSender;
-	private TextSender textSender;
-	
+	BaseMessagingFeature baseMessagingFeature;
 
-	public CoreService(Boolean isEmailEnabled, Boolean isTextEnabled){
-	
-		this.isEmailEnabled = isEmailEnabled;
-		this.isTextEnabled = isTextEnabled;
-		textSender = new TextSender();
-		emailSender = new EmailSender();
+	public CoreService(BaseMessagingFeature baseMessagingFeature){
+		this.baseMessagingFeature = baseMessagingFeature;
 	}
 	
 	public TransferStatus Deposit(double amount,  Account account) {
@@ -45,20 +35,12 @@ public class CoreService {
 		double newBalanace = account.getBalance()+amount;
 		account.setBalance(newBalanace);
 
-
-		if(isEmailEnabled) {
-			emailSender.SendMessage(account.getEmail(),"Successful Transaction", "Thank you for using our service!");	
-		}
-		
-		if(isTextEnabled) {
-			textSender.SendMessage(account.getPhoneNumber(),"Successful Transaction", "Thank you for using our service!");	
-		}
-		
+		baseMessagingFeature.SendMessage(account);
 
 		return TransferStatus.Valid;
 	}
 
-	
+
 	public TransferStatus Withdrawal(double amount,Account account) {
 		
 		if(amount<=0) {
@@ -85,13 +67,7 @@ public class CoreService {
 		double newBalanace = account.getBalance()-amount;
 		account.setBalance(newBalanace);
 		
-		if(isEmailEnabled) {
-			emailSender.SendMessage(account.getEmail(),"Successful Transaction", "Thank you for using our service!");	
-		}
-		
-		if(isTextEnabled) {
-			textSender.SendMessage(account.getPhoneNumber(),"Successful Transaction", "Thank you for using our service!");	
-		}
+		baseMessagingFeature.SendMessage(account);
 		
 		return TransferStatus.Valid;
 	}
