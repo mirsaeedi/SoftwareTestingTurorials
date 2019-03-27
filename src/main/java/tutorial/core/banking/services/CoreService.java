@@ -1,16 +1,18 @@
 package tutorial.core.banking.services;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 
 import tutorial.core.banking.features.BaseMessagingFeature;
+import tutorial.core.banking.features.FeatureAwareFactory;
 import tutorial.core.banking.models.Account;
 import tutorial.core.banking.models.TransferStatus;
 
 public class CoreService {
 
-	BaseMessagingFeature baseMessagingFeature;
+	FeatureAwareFactory featureAwareFactory;
 
-	public CoreService(BaseMessagingFeature baseMessagingFeature){
-		this.baseMessagingFeature = baseMessagingFeature;
+	public CoreService(FeatureAwareFactory featureAwareFactory){
+		this.featureAwareFactory = featureAwareFactory;
 	}
 	
 	public TransferStatus Deposit(double amount,  Account account) {
@@ -35,11 +37,20 @@ public class CoreService {
 		double newBalanace = account.getBalance()+amount;
 		account.setBalance(newBalanace);
 
-		baseMessagingFeature.SendMessage(account);
-
+		SendMessage(account);
+	
 		return TransferStatus.Valid;
 	}
 
+
+	private void SendMessage(Account account) {
+		
+		ArrayList<BaseMessagingFeature> features = featureAwareFactory.getMessagingFeature();
+		
+		for(BaseMessagingFeature feature:features) {
+			feature.SendMessage(account);
+		}
+	}
 
 	public TransferStatus Withdrawal(double amount,Account account) {
 		
@@ -67,7 +78,7 @@ public class CoreService {
 		double newBalanace = account.getBalance()-amount;
 		account.setBalance(newBalanace);
 		
-		baseMessagingFeature.SendMessage(account);
+		SendMessage(account);
 		
 		return TransferStatus.Valid;
 	}

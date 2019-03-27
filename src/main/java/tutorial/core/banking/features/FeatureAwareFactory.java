@@ -1,16 +1,32 @@
 package tutorial.core.banking.features;
 
+import java.util.ArrayList;
+
 public class FeatureAwareFactory {
 
-	public BaseMessagingFeature getMessagingFeature(Boolean isEmailEnabled, Boolean isTextEnabled) {
+	private FeatureConfig featureConfig;
+	
+	public FeatureAwareFactory() {
 		
-		if(isEmailEnabled) {
-			return new EmailSendingFeature();
+		featureConfig = new FeatureConfig();
+		
+	}
+	
+	public ArrayList<BaseMessagingFeature> getMessagingFeature() {
+		
+		ArrayList<BaseMessagingFeature> list= new ArrayList<BaseMessagingFeature>();
+		
+		if(featureConfig.isOn("SendingEmail")) {
+			list.add(new EmailSendingFeature());
 		}
-		else if(isTextEnabled) {
-			return  new TextSendingFeature();
+		if(featureConfig.isOn("SendingText")) {
+			list.add( new TextSendingFeature());
 		}
 		
-		return new EmptySendingFeature();
+		if(list.size()==0) {
+			list.add(new EmptySendingFeature());
+		}
+		
+		return list;
 	}
 }
