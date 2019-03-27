@@ -3,6 +3,7 @@ package tutorial.core.banking.models;
 public class Account {
 
 	private String email;
+	private String phoneNumber;
 
 	private String accountNumber;
 	private double balance;
@@ -62,6 +63,14 @@ public class Account {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 

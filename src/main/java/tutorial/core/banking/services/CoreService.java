@@ -3,16 +3,18 @@ import java.security.InvalidParameterException;
 
 import tutorial.core.banking.data.DataRepository;
 import tutorial.core.banking.infrastructure.EmailSender;
+import tutorial.core.banking.infrastructure.TextSender;
 import tutorial.core.banking.models.Account;
 import tutorial.core.banking.models.TransferStatus;
 
 public class CoreService {
 
 	private EmailSender emailSender;
+	private TextSender textSender;
 	
-
 	public CoreService(){
 	
+		textSender = new TextSender();
 		emailSender = new EmailSender();
 	}
 	
@@ -40,7 +42,8 @@ public class CoreService {
 
 		// feature not released, toggled out:
 		// emailSender.SendMessage(account.getEmail(),"Successful Transaction", "Thank you for using our service!");
-		
+		textSender.SendMessage(account.getPhoneNumber(),"Successful Transaction", "Thank you for using our service!");	
+
 
 		return TransferStatus.Valid;
 	}
@@ -74,6 +77,8 @@ public class CoreService {
 		
 		// feature not released, toggled out:
 		// emailSender.SendMessage(account.getEmail(),"Successfull Transaction", "Thank you for using our service!");
+		textSender.SendMessage(account.getPhoneNumber(),"Successful Transaction", "Thank you for using our service!");	
+
 		
 		return TransferStatus.Valid;
 	}
