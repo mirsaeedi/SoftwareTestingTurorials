@@ -11,17 +11,18 @@ public class Account {
 	private double maxAllowedBalance;
 	private AccountType accountType;
 	
-	public Account(String accountNumber,double balance,String email,AccountType accountType) {
+	public Account(String accountNumber,double balance,String email,String phoneNumber,AccountType accountType) {
 		this.accountNumber=accountNumber;
 		this.balance=balance;
 		this.email=email;
+		this.phoneNumber=phoneNumber;
 		this.accountType=accountType;
 		this.maxAllowedBalance=Double.MAX_VALUE;
 	}
 	
-	public Account(String accountNumber,double balance,String email,AccountType accountType,double maxAllowedBalance){
+	public Account(String accountNumber,double balance,String email,String phoneNumber,AccountType accountType,double maxAllowedBalance){
 		
-		this(accountNumber,balance,email,accountType);
+		this(accountNumber,balance,email,phoneNumber,accountType);
 		this.maxAllowedBalance=maxAllowedBalance;
 	}
 	

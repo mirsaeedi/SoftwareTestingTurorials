@@ -1,7 +1,5 @@
 package tutorial.core.banking.services;
 import java.security.InvalidParameterException;
-
-import tutorial.core.banking.data.DataRepository;
 import tutorial.core.banking.infrastructure.EmailSender;
 import tutorial.core.banking.infrastructure.TextSender;
 import tutorial.core.banking.models.Account;
