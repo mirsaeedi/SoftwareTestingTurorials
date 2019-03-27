@@ -19,9 +19,7 @@ git checkout feature_toggling
 ## Get the Code
 
 ```
-
 git pull origin feature_toggling_solution
-git checkout feature_toggling_solution
 
 ```
 
