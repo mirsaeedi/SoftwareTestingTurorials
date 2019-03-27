@@ -29,8 +29,13 @@ git checkout feature_toggling_solution
 
 We're going to refactor this code in 4 steps to make it a more flexible and maintainable.
 
-steps:
+## Steps
+
 * _Step 1_ change commented out toggles into if-else conditions. ([Diff](https://github.com/mirsaeedi/SoftwareTestingTurorials/compare/4c73143a4d9f410b0bcd9202a4922181415e7db1..913735e95517be7d68f43461ed86b4f0941de02e]))
+  ```
+  git checkout 913735e95517be7d68f43461ed86b4f0941de02e
+  ```
+  
   1. Apparantly, we need a better way of toggling.
 * _Step 2_ use inversion of control for the toggle flags ([Diff](https://github.com/mirsaeedi/SoftwareTestingTurorials/compare/913735e95517be7d68f43461ed86b4f0941de02e..1e82cc021a60fe0691544f3931848d83a8a467b5]))
   1. CoreService is not testable.
@@ -45,15 +50,5 @@ steps:
   1. We cannot toggle dynamically.
   2. CoreService is coupled to BaseMessagingFeature. What if we want to add other features? we need to change its signature.
   3. What if we want to activate all features at the same time? what if none of the features are active?
-
-# Fetch the bits
-
-```
-
-git clone https://github.com/mirsaeedi/SoftwareTestingTurorials
-git pull origin feature_toggling
-git checkout feature_toggling
-
-```
 
 
