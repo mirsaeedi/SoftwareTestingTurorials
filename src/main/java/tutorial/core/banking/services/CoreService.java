@@ -8,15 +8,17 @@ import tutorial.core.banking.models.TransferStatus;
 
 public class CoreService {
 
-	private Boolean isEmailEnabled = false;
-	private Boolean isTextEnabled = false;
+	private Boolean isEmailEnabled;
+	private Boolean isTextEnabled;
 	
 	private EmailSender emailSender;
 	private TextSender textSender;
 	
 
-	public CoreService(){
+	public CoreService(Boolean isEmailEnabled, Boolean isTextEnabled){
 	
+		this.isEmailEnabled = isEmailEnabled;
+		this.isTextEnabled = isTextEnabled;
 		textSender = new TextSender();
 		emailSender = new EmailSender();
 	}

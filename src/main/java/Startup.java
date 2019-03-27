@@ -8,7 +8,7 @@ public class Startup {
 	    
 		Account account = new Account("12873192763812",2000,"joe@mtl.ca",AccountType.Checking);
 		
-		CoreService coreService = new CoreService();
+		CoreService coreService = new CoreService(true,false);
 		
 		coreService.Deposit(100, account);
 		
