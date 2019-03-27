@@ -2,23 +2,25 @@ package tutorial.core.banking.models;
 
 public class Account {
 
+	private String email;
+
 	private String accountNumber;
 	private double balance;
 	private boolean isBlocked=false;
 	private double maxAllowedBalance;
 	private AccountType accountType;
 	
-	public Account(String accountNumber,double balance,boolean isBlocked,AccountType accountType) {
+	public Account(String accountNumber,double balance,String email,AccountType accountType) {
 		this.accountNumber=accountNumber;
 		this.balance=balance;
-		this.isBlocked=isBlocked;
+		this.email=email;
 		this.accountType=accountType;
 		this.maxAllowedBalance=Double.MAX_VALUE;
 	}
 	
-	public Account(String accountNumber,double balance,boolean isBlocked,AccountType accountType,double maxAllowedBalance){
+	public Account(String accountNumber,double balance,String email,AccountType accountType,double maxAllowedBalance){
 		
-		this(accountNumber,balance,isBlocked,accountType);
+		this(accountNumber,balance,email,accountType);
 		this.maxAllowedBalance=maxAllowedBalance;
 	}
 	
@@ -53,5 +55,14 @@ public class Account {
 	public String getAccountNumber() {
 		return this.accountNumber;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 
 }
