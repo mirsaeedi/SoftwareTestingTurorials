@@ -29,7 +29,7 @@ We're going to refactor this code in 4 steps to make it a more flexible and main
 ## Steps
 
 * _Step 1_ change commented out toggles into if-else conditions. (Diff: https://github.com/mirsaeedi/SoftwareTestingTurorials/compare/4c73143a4d9f410b0bcd9202a4922181415e7db1..913735e95517be7d68f43461ed86b4f0941de02e)
-  1. Apparantly, we need a better way of toggling.
+  1. Apparently, we need a better way of toggling.
   
   ```
   git checkout 913735e95517be7d68f43461ed86b4f0941de02e
