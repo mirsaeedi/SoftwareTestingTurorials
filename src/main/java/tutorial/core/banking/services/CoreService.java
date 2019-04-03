@@ -16,34 +16,7 @@ public class CoreService {
 		emailSender = new EmailSender();
 	}
 	
-	public TransferStatus Withdrawal(double amount,Account account) {
-		
-		if(amount<=0) {
-			throw new InvalidParameterException("amount should be greater than zero");
-		}
 	
-		if(account == null) {
-
-			throw new InvalidParameterException("account should not be null");
-		}
-		
-		if(account.getBalance()<amount)
-			return TransferStatus.NotEnoughMoneyError;
-				
-		if(IsAccountBlocked(account)) {
-			return TransferStatus.AccountIsBlockedError;
-		}
-		
-		if(IsThisAFraudTransfer(amount,account)) {
-			account.setIsBlocked(true);
-			return TransferStatus.Fraud;
-		}
-		
-		double newBalanace = account.getBalance()-amount;
-		account.setBalance(newBalanace);	
-
-		return TransferStatus.Valid;
-	}
 
 	private boolean IsThisAFraudTransfer(double amount, Account account) {
 		
