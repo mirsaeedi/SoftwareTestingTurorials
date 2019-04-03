@@ -16,37 +16,6 @@ public class CoreService {
 		emailSender = new EmailSender();
 	}
 	
-	public TransferStatus Deposit(double amount,  Account account) {
-				
-		if(amount<=0) {
-			throw new InvalidParameterException("amount should be greater than zero");
-		}
-		
-		if(account == null) {
-			throw new InvalidParameterException("account should not be null");
-		}
-				
-		if(IsAccountBlocked(account)) {
-			return TransferStatus.AccountIsBlockedError;
-		}
-	
-		if(IsThisAFraudTransfer(amount,account)) {
-			account.setIsBlocked(true);
-			return TransferStatus.Fraud;
-		}
-		
-		double newBalanace = account.getBalance()+amount;
-		account.setBalance(newBalanace);
-
-		// feature not released, toggled out:
-		// emailSender.SendMessage(account.getEmail(),"Successful Transaction", "Thank you for using our service!");
-		textSender.SendMessage(account.getPhoneNumber(),"Successful Transaction", "Thank you for using our service!");	
-
-
-		return TransferStatus.Valid;
-	}
-
-	
 	public TransferStatus Withdrawal(double amount,Account account) {
 		
 		if(amount<=0) {
@@ -71,13 +40,8 @@ public class CoreService {
 		}
 		
 		double newBalanace = account.getBalance()-amount;
-		account.setBalance(newBalanace);
-		
-		// feature not released, toggled out:
-		// emailSender.SendMessage(account.getEmail(),"Successfull Transaction", "Thank you for using our service!");
-		textSender.SendMessage(account.getPhoneNumber(),"Successful Transaction", "Thank you for using our service!");	
+		account.setBalance(newBalanace);	
 
-		
 		return TransferStatus.Valid;
 	}
 
