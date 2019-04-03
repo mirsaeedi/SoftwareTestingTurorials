@@ -1,5 +1,4 @@
-# Feature Toggling 
-
+# Pull Requests
 
 
 steps:
@@ -8,14 +7,5 @@ steps:
 * _Step 3_ create a factory / strategy pattern to create the relevant code or inject the relevant function
 * _Step 4_ read the flag from a config file in the factory class
 
-# Fetch the bits
-
-```
-
-git clone https://github.com/mirsaeedi/SoftwareTestingTurorials
-git pull origin feature_toggling
-git checkout feature_toggling
-
-```
 
 
