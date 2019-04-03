@@ -11,9 +11,9 @@ public class CoreServiceTest {
 	@Test
 	public void IfMoneyDepositIsFraud_SendEmailToSecurity(){
 		
-		assert(true);
-		 		
-
+		assert(false);
+		
+		
 	}	
 	
 	
